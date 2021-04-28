@@ -1,10 +1,6 @@
-import $ from 'jquery';
 import './style.scss';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import App from './app';
 
-$('#main').html('Here we go!');
-
-let time = 0;
-setInterval(() => {
-  time += 3;
-  $('#main').html(`You've been on this page for ${time} seconds`);
-}, 3000);
+ReactDOM.render(<App />, document.getElementById('main'));
