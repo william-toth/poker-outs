@@ -21,5 +21,5 @@ I did two major things for extra credit:
 2) clear all button. If the workspace and number of collaborators get very large, the user can hit 'clear notes', which deletes all notes. I thought this added a lot of practical functionality to the board.
 
 ## Screenshots
-![](scr.mov)
+![](scr.gif)
 ![](sc.png)
