@@ -16,10 +16,12 @@ class Note extends Component {
     };
   }
 
+  // Function to delete a note
   delete = () => {
     this.props.delete(this.props.id);
   }
 
+  // Function to determine whether or not to render content or editing screen
   renderContent = () => {
     if (this.state.isEditing) {
       return (
@@ -37,6 +39,7 @@ class Note extends Component {
     }
   }
 
+  // Function to determine whether or not user is editing and render edit logo or checkmark
   renderEdit = () => {
     if (this.state.isEditing) {
       return (
@@ -49,10 +52,12 @@ class Note extends Component {
     }
   }
 
+  // handling when the user inputs text
   handleTextChange = (event) => {
     this.setState({ tempContent: event.target.value });
   }
 
+  // function to toggle whether or not user is editing
   toggleEditing = () => {
     if (this.state.isEditing) {
       this.props.update(this.props.id, {
@@ -63,9 +68,11 @@ class Note extends Component {
     this.setState({ isEditing: !this.state.isEditing });
   }
 
+  // function to handle when a user drags an item
   handleDrag = (e, data) => {
     console.log(this.props.getMaxZ());
     let newZ = this.props.note.zIndex;
+    // z index manipulation
     if (this.props.note.zIndex < this.props.getMaxZ()) {
       newZ = this.props.getMaxZ() + 1;
       this.props.updateZIndex(newZ);

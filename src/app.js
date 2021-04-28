@@ -21,6 +21,7 @@ class App extends Component {
     });
   }
 
+  // Function to add a note (on firebase)
   addNote = (t) => {
     const zIdx = this.state.maxZIndex + 1;
     this.setState({ maxZIndex: zIdx });
@@ -30,6 +31,7 @@ class App extends Component {
     db.getDB().ref('notes').push(newNote);
   }
 
+  // Function to delete a note (on firebase)
   deleteNote = (id) => {
     if (this.state.notes.count() === 1) {
       this.setState({ maxZIndex: 0 });
@@ -37,6 +39,7 @@ class App extends Component {
     db.getDB().ref('notes').child(id).remove();
   }
 
+  // Function to delete all notes
   clearAll = () => {
     const keys = [];
     for (const key of this.state.notes.keySeq()) {
@@ -47,14 +50,17 @@ class App extends Component {
     }
   }
 
+  // Function to update the map on firebase
   updateMap = (id, newNote) => {
     db.getDB().ref('notes').child(id).update(newNote);
   }
 
+  // Function to update the maximum z index
   updateZIndex = (newMax) => {
     this.setState({ maxZIndex: newMax });
   }
 
+  // Getter function for max Z
   getMaxZ = () => {
     let max = 0;
     for (const note of this.state.notes.valueSeq()) {
@@ -65,6 +71,7 @@ class App extends Component {
     return max;
   }
 
+  // Render these components
   render() {
     return (
       <div>

@@ -14,6 +14,7 @@ class AddNote extends Component {
       this.setState({ content: event.target.value });
     }
 
+    // Function telling app component to add a new note
     onAdd = () => {
       if (this.state.content.length > 10) {
         alert('Please enter a title of at most 10 characters');
@@ -23,6 +24,7 @@ class AddNote extends Component {
       }
     }
 
+    // Function to clear all notes
     clear = () => {
       this.props.clear();
     }
