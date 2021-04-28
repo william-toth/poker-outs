@@ -23,6 +23,10 @@ class AddNote extends Component {
       }
     }
 
+    clear = () => {
+      this.props.clear();
+    }
+
     render() {
       return (
         <div className="add-note-holder">
@@ -34,6 +38,7 @@ class AddNote extends Component {
             placeholder="note title"
           />
           <button type="button" className="label-names" onClick={this.onAdd}>Add Note</button>
+          <button type="button" className="label-names" onClick={this.clear}>Clear Notes</button>
         </div>
       );
     }

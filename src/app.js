@@ -37,6 +37,16 @@ class App extends Component {
     db.getDB().ref('notes').child(id).remove();
   }
 
+  clearAll = () => {
+    const keys = [];
+    for (const key of this.state.notes.keySeq()) {
+      keys.push(key);
+    }
+    for (const key of keys) {
+      this.deleteNote(key);
+    }
+  }
+
   updateMap = (id, newNote) => {
     db.getDB().ref('notes').child(id).update(newNote);
   }
@@ -59,7 +69,7 @@ class App extends Component {
     return (
       <div>
         <h1>NOTES</h1>
-        <AddNote addNew={this.addNote} />
+        <AddNote addNew={this.addNote} clear={this.clearAll} />
         {this.state.notes.entrySeq().map(([id, note]) => {
           return <Note id={id} note={note} delete={this.deleteNote} update={this.updateMap} getMaxZ={this.getMaxZ} updateZIndex={this.updateZIndex} />;
         })}
