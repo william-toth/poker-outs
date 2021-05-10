@@ -6,6 +6,8 @@
         "es6": true
     },
     "rules": {
+        "no-plusplus": 0,
+        "comma-spacing": 0,
         "react/no-unused-state": 0,
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": 2,
