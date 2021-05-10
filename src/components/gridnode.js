@@ -14,9 +14,9 @@ class GridNode extends Component {
   }
 
   renderButton = () => {
-    if (!this.props.node.clicked) {
+    if (this.props.node.clicked) {
       return (
-        <button className="grid-button" style={{ color: 'black' }} type="button" onClick={this.click.bind()}>{this.props.node.word}</button>
+        <button className="grid-button-clicked" style={{ color: 'rgb(60%,60%,60%)', backgroundColor: this.props.node.color }} type="button">{this.props.node.word}</button>
       );
     } else if (this.props.spm) {
       return (
@@ -24,7 +24,7 @@ class GridNode extends Component {
       );
     } else {
       return (
-        <button className="grid-button-clicked" style={{ color: 'rgb(60%,60%,60%)', backgroundColor: this.props.node.color }} type="button">{this.props.node.word}</button>
+        <button className="grid-button" style={{ color: 'black' }} type="button" onClick={this.click.bind()}>{this.props.node.word}</button>
       );
     }
   }
