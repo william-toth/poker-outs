@@ -14,13 +14,13 @@ class GridNode extends Component {
   }
 
   renderButton = () => {
-    if (this.props.spm) {
-      return (
-        <button className="grid-button" style={{ color: this.props.node.color }} type="button">{this.props.node.word}</button>
-      );
-    } else if (!this.props.node.clicked) {
+    if (!this.props.node.clicked) {
       return (
         <button className="grid-button" style={{ color: 'black' }} type="button" onClick={this.click.bind()}>{this.props.node.word}</button>
+      );
+    } else if (this.props.spm) {
+      return (
+        <button className="grid-button" style={{ color: this.props.node.color }} type="button">{this.props.node.word}</button>
       );
     } else {
       return (
