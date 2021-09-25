@@ -11,7 +11,7 @@ h1 {
     -webkit-text-stroke: 2px #ef476f;
     letter-spacing: 40px;
     font-size: 50px;
-    margin-bottom: -10px;
+    margin-bottom: 20px;
 }
 
 h2, h3, h4 {
@@ -112,4 +112,44 @@ h2, h3, h4 {
     color: rgb(60%,60%,60%);
     text-align: right;
     margin-right: 14.8%;
+}
+
+.board {
+    width: 44vw;
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+    margin-left: 26.5vw;
+    margin-bottom: 100px;
+    border: 1.5vw solid rgb(15%,15%,15%);
+}
+
+.white-square {
+    background-color: rgb(80%,80%,80%);
+    width: 5.5vw;
+    height: 5.5vw;
+    display: flex;
+    justify-content: center;
+}
+
+.black-square {
+    background-color: rgb(10%,35%,10%);
+    width: 5.5vw;
+    height: 5.5vw;
+    display: flex;
+    justify-content: center;
+}
+
+.selected-square {
+    background-color: rgb(50%,100%,100%);
+    width: 5.5vw;
+    height: 5.5vw;
+    display: flex;
+    justify-content: center;
+}
+
+.piece {
+    margin: 0.35vw;
+    width: 4.8vw;
+    height: 4.8vw;
 }
