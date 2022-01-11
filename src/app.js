@@ -1,245 +1,234 @@
 import React, { Component } from 'react';
 import './style.scss';
-import Header from './components/header';
-import GridNode from './components/gridnode';
-import * as db from './services/datastore';
-import Board from './components/board';
+import ChooseCards from './components/choosecards';
+import Results from './components/results';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    let arr = [[],[],[],[],[],[],[],[]]
-    for (let i = 0; i < 8; i++) {
-      if (i % 2 == 0) {
-        arr[1].push({sqColor: "black", color: "black", piece: "pawn", coords: [i,1]});
-        arr[6].push({sqColor: "white", color: "white", piece: "pawn", coords: [i,6]});
-      } else {
-        arr[1].push({sqColor: "white", color: "black", piece: "pawn", coords: [i,1]});
-        arr[6].push({sqColor: "black", color: "white", piece: "pawn", coords: [i,6]});
-      }
-      for (let j = 2; j < 6; j++) {
-        if ((i + j)%2 == 0) {
-          arr[j].push({sqColor: 'white', color: null, piece: null, coords: [i,j]})
+    this.state = {
+        pair: null,
+        trips: null,
+        quads: null,
+        twopair: null,
+        fullhouse: null,
+        flush: null,
+        straight: null,
+        results: false,
+    }
+  }
 
-        } else {
-          arr[j].push({sqColor: 'black', color: null, piece: null, coords: [i,j]})
-        }
-      }
-      if (i==0) {
-        arr[0].push({sqColor: "white", color: "black", piece: "rook", coords: [i,0]});
-        arr[7].push({sqColor: "black", color: "white", piece: "rook", coords: [i,7]});
-      } else if (i==7) {
-        arr[0].push({sqColor: "black", color: "black", piece: "rook", coords: [i,0]});
-        arr[7].push({sqColor: "white", color: "white", piece: "rook", coords: [i,7]});
-      } else if (i==1) {
-        arr[0].push({sqColor: "black", color: "black", piece: "knight", coords: [i,0]});
-        arr[7].push({sqColor: "white", color: "white", piece: "knight", coords: [i,7]});
-      } else if (i==6) {
-        arr[0].push({sqColor: "white", color: "black", piece: "knight", coords: [i,0]});
-        arr[7].push({sqColor: "black", color: "white", piece: "knight", coords: [i,7]});
-      } else if (i==2) {
-        arr[0].push({sqColor: "white", color: "black", piece: "bishop", coords: [i,0]});
-        arr[7].push({sqColor: "black", color: "white", piece: "bishop", coords: [i,7]});
-      } else if (i==5) {
-        arr[0].push({sqColor: "black", color: "black", piece: "bishop", coords: [i,0]});
-        arr[7].push({sqColor: "white", color: "white", piece: "bishop", coords: [i,7]});
-      } else if (i==3) {
-        arr[0].push({sqColor: "black", color: "black", piece: "queen", coords: [i,0]});
-        arr[7].push({sqColor: "white", color: "white", piece: "queen", coords: [i,7]});
-      } else {
-        arr[0].push({sqColor: "white", color: "black", piece: "king", coords: [i,0]});
-        arr[7].push({sqColor: "black", color: "white", piece: "king", coords: [i,7]});
+  calculate = (cards) => {
+    const playerCards = cards.slice(0,2);
+    const flop = cards.slice(2);
+    let turnOut = false;
+    if (flop[3][0] == null) flop.pop();
+    else turnOut = true;
+    let numbers = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "Jack": 0, "King": 0, "Queen": 0, "Ace": 0}
+    let suits = {"Clubs": 0, "Hearts": 0, "Diamonds": 0, "Spades": 0}
+
+    for (let card of cards) {
+      if (card[0] != null) {
+        numbers[card[0]] ++;
+        suits[card[1]] ++;
       }
     }
-    this.state = {
-      whiteTurn: true,
-      boardArr: arr,
-      // possibleWords: ['boyfriend','direction','strategy','technology','army','camera','freedom','paper','child',
-      //   'chemistry','soup','nation','bolt','bat','octopus','dentist','family','fiction','fear','flame',
-      //   'flood','gold','grass','grain','grind','force','government','harmony','humor','ink','insurance',
-      //   'iron','jelly','judge','knowledge','land','leather','linen','machine','market','meat','milk','money','ornament',
-      //   'owner','page','propaganda','poison','polish','prosperity','punishment','reaction','brain','angle','ant','arch','apple',
-      //   'cushion','comb','dog','door','drain','ear','egg','eye','structure','tax','tendency','time','thunder','trouble',
-      //   'unit','vessel','view','war','wax','weather','wine','wool','sock','square','spring','stem','store','tail','wheel',
-      //   'flag','garden','goat','head','horn','island','jewel','knee','map','monkey','office','orange','pipe','umbrella'],
-      // grid: [],
-      // spymaster: false,
-      // score: { red: 9, blue: 8 },
-      // gameOver: false,
-      // winner: null,
 
-    };
+    this.pair(numbers, turnOut);
+    this.trips(numbers, turnOut);
+    this.quads(numbers,turnOut);
+    this.twopair(numbers, turnOut);
+    this.fullhouse(numbers,turnOut);
+    this.flush(suits, turnOut);
+    this.straight(numbers, turnOut);
+    this.setState({results: !this.state.results});
+
   }
 
-  // componentDidMount() {
-  //   db.fetchGrid((newGrid) => {
-  //     this.setState({ grid: newGrid });
-  //   });
-
-  //   db.fetchScore((newScore) => {
-  //     this.setState({ score: newScore });
-  //   });
-  //   if (this.state.score.red == 0) {
-  //     this.setState({ winner: 'Red' });
-  //     this.setState({ gameOver: true });
-  //   } else if (this.state.score.blue == 0) {
-  //     this.setState({ winner: 'Blue' });
-  //     this.setState({ gameOver: true });
-  //   }
-  // }
-
-  // initializeGrid = () => {
-  //   if (db.getDB().ref('grid') == null) {
-  //     this.randomizeGrid();
-  //   }
-  // }
-
-  // updateGrid = (newGrid) => {
-  //   db.getDB().ref('grid').set(newGrid);
-  // }
-
-  // updateScore = (newScore) => {
-  //   db.getDB().ref('score').set(newScore);
-  // }
-
-  // randomizeGrid = () => {
-  //   this.setState({ gameOver: false });
-  //   this.setState({ winner: null });
-  //   this.setState({ score: { red: 9, blue: 8 } });
-  //   this.setState({ spymaster: false });
-  //   this.updateScore({ red: 9, blue: 8 });
-  //   const seenWords = [];
-  //   const newGrid = [];
-  //   let red = 9;
-  //   let blue = 8;
-  //   let black = 8;
-  //   for (let i = 0; i < 25; i++) {
-  //     let idx = Math.floor(Math.random() * this.state.possibleWords.length);
-  //     while (seenWords.includes(this.state.possibleWords[idx])) {
-  //       idx = Math.floor(Math.random() * this.state.possibleWords.length);
-  //     }
-  //     let color = 0;
-  //     let colorStr = '';
-  //     if (red != 0 && blue != 0 && black != 0) {
-  //       color = Math.floor(Math.random() * 3);
-  //     } else if (red == 0 && blue != 0 && black != 0) {
-  //       color = 1 + Math.floor(Math.random() * 2);
-  //     } else if (red != 0 && blue == 0 && black != 0) {
-  //       color = 2 * Math.floor(Math.random() * 2);
-  //     } else if (red != 0 && blue != 0 && black == 0) {
-  //       color = Math.floor(Math.random() * 2);
-  //     } else if (blue == 0 && black == 0) {
-  //       color = 0;
-  //     } else if (red == 0 && black == 0) {
-  //       color = 1;
-  //     } else if (red == 0 && blue == 0) {
-  //       color = 2;
-  //     }
-
-  //     if (color == 0) {
-  //       red--;
-  //       colorStr = '#ef476f';
-  //     } else if (color == 1) {
-  //       blue--;
-  //       colorStr = '#118ab2';
-  //     } else {
-  //       black--;
-  //       colorStr = 'black';
-  //     }
-  //     const gridObj = {
-  //       word: this.state.possibleWords[idx], color: colorStr, clicked: false, toShow: 'black', bomb: false,
-  //     };
-  //     seenWords.push(this.state.possibleWords[idx]);
-  //     newGrid.push(gridObj);
-  //   }
-  //   console.log(newGrid);
-  //   this.updateGrid(newGrid);
-  //   // this.reload();
-  // }
-
-  // reload = () => {
-  //   const gridCopy = this.state.grid;
-  //   if (!this.state.spymaster) {
-  //     for (const gridNode of gridCopy) {
-  //       gridNode.toShow = 'black';
-  //     }
-  //   } else {
-  //     for (const gridNode of gridCopy) {
-  //       gridNode.toShow = gridNode.color;
-  //     }
-  //   }
-  //   this.setState({ grid: gridCopy });
-  // }
-
-  // switchPositions = () => {
-  //   this.setState({ spymaster: !this.state.spymaster });
-  //   // this.reload();
-  // }
-
-  // getScore = () => {
-  //   return this.state.score;
-  // }
-
-  // clickButton = (word) => {
-  //   if (!this.state.spymaster) {
-  //     const gridCopy = this.state.grid;
-  //     const scoreCopy = this.state.score;
-  //     for (const gridNode of gridCopy) {
-  //       if (gridNode.word == word) {
-  //         gridNode.clicked = true;
-  //         if (gridNode.color == '#ef476f') {
-  //           scoreCopy.red--;
-  //         } else if (gridNode.color == '#118ab2') {
-  //           scoreCopy.blue--;
-  //         }
-  //       }
-  //     }
-  //     this.updateGrid(gridCopy);
-  //     this.updateScore(scoreCopy);
-  //   }
-  // }
-
-  movePiece = (x1,y1,x2,y2) => {
-    let boardCopy = this.state.boardArr;
-    let square = boardCopy[y1][x1];
-    boardCopy[y2][x2].color = square.color;
-    boardCopy[y2][x2].piece = square.piece;
-    boardCopy[y1][x1].color = null;
-    boardCopy[y1][x1].piece = null;
-    this.setState({boardArr: boardCopy});
+  pair = (numbers, turnOut) => {
+    let pairOdds = null
+    if (Object.values(numbers).includes(2) || Object.values(numbers).includes(3) || Object.values(numbers).includes(4)) {
+      pairOdds = 100
+    }
+    else {
+      if (turnOut) pairOdds = 18/46*100;
+      else pairOdds = (1-(32/47)*(28/46))*100
+    }
+    this.setState({pair: Math.round(pairOdds)});
   }
 
-  changePiece = (coords) => {
-    this.state.boardArr[coords[1]][coords[0]].piece = 'queen';
+  trips = (numbers, turnOut) => {
+    let tripsOdds = null
+    if (Object.values(numbers).includes(3) || Object.values(numbers).includes(4)) {
+      tripsOdds = 100
+    }
+    else {
+      let numVals = Object.values(numbers)
+      let twoCount = 0
+      for (let val of numVals) {
+        if (val == 2) twoCount ++;
+      }
+      if (turnOut) {
+        if (twoCount == 0) tripsOdds = 0
+        else if (twoCount == 1) tripsOdds = 2/46*100;
+        else tripsOdds = 4/46*100;
+      }
+      else {
+        if (twoCount == 0) tripsOdds = (15/47)*(2/46)*100;
+        else if (twoCount == 1) tripsOdds = (1-(45/47)*(44/46)*(1-(15/47)*(2/46)))*100;
+        else if (twoCount == 2) tripsOdds = (1-(43/47)*(42/46)*(1-(15/47)*(2/46)))*100;
+      }
+    }
+    this.setState({trips: Math.round(tripsOdds)});
   }
 
-  // Render these components
-  render() {
-    // return (
-    //   <div>
-    //     {this.initializeGrid()}
-    //     <Header randomizeGrid={this.randomizeGrid} switch={this.switchPositions} reload={this.reload} getScore={this.getScore} />
-    //     {this.state.gameOver && (
-    //     <div className="game-over">
-    //       <h2>Game Over</h2>
-    //       <h3>{this.state.winner} Wins!!</h3>
-    //       <h4>Hit regenerate to play again</h4>
-    //     </div>
-    //     )}
-    //     {!this.state.gameOver && (
-    //     <div className="grid">
-    //       {this.state.grid.map((gridNode) => {
-    //         return <GridNode spm={this.state.spymaster} node={gridNode} click={this.clickButton} />;
-    //       })}
-    //     </div>
-    //     )}
-    //     <div className="tag">by Will Toth, April 2021</div>
-    //   </div>
-    // );
+  quads = (numbers, turnOut) => {
+    let quadsOdds = null
+    if (Object.values(numbers).includes(4)) {
+      quadsOdds = 100
+    }
+    else {
+      let numVals = Object.values(numbers)
+      let twoCount = 0
+      let threeCount = 0
+      for (let val of numVals) {
+        if (val == 2) twoCount ++;
+        if (val == 3) threeCount ++;
+      }
+      if (turnOut) {
+        if (threeCount == 0) quadsOdds = 0;
+        else if (threeCount == 1) quadsOdds = 1/46*100;
+        else quadsOdds = 2/46*100;
+      } else {
+        if (threeCount == 0) {
+          if (twoCount == 0) quadsOdds = 0;
+          else if (twoCount == 1) quadsOdds = (2/47)*(1/46)*100;
+          else quadsOdds = (4/47)*(1/46)*100;
+        }
+        else {
+          if (twoCount == 0) quadsOdds = (1-(46/47)*(45/46))*100;
+          if (twoCount == 1) quadsOdds = (1-(46/47)*(45/46) * (1-((2/47)*(1/46))))*100;
+        }
+      }
+      
+    }
+    this.setState({quads: Math.round(quadsOdds)});
+  }
+
+  twopair = (numbers, turnOut) => {
+    let twopairOdds = null;
+    let numVals = Object.values(numbers)
+    let twoCount = 0;
+    for (let val of numVals) {
+      if (val == 2) twoCount ++;
+    }
+    if (twoCount >= 2) {
+      twopairOdds = 100;
+    }
+    if (turnOut) {
+      if (twoCount == 0) twopairOdds = 0;
+      if (twoCount == 1) twopairOdds = (12/46)*100
+    } else {
+      if (twoCount == 0) twopairOdds = (15/47)*(12/46)*100
+      if (twoCount == 1) twopairOdds = (1-(38/47)*(34/46))*100
+    }
+    this.setState({twopair: Math.round(twopairOdds)})
+  }
+
+  fullhouse = (numbers, turnOut) => {
+    let fullhouseOdds = null;
+    let numVals = Object.values(numbers)
+    let twoCount = 0;
+    let threeCount = 0;
+    for (let val of numVals) {
+      if (val == 2) twoCount ++;
+      if (val == 3) threeCount ++;
+    }
+    if (twoCount >= 1 && threeCount >= 1 ) {
+      fullhouseOdds = 100;
+    }
+    else if (turnOut) {
+      if (threeCount == 2) fullhouseOdds = 100;
+      if (threeCount == 1) fullhouseOdds = (9/46)*100;
+      if (threeCount == 0) {
+        if (twoCount == 2) fullhouseOdds = (4/46)*100;
+        else fullhouseOdds = 0;
+      }
+    }
+    else {
+      if (threeCount == 1) {
+        fullhouseOdds = (1-(41/47)*(37/46))*100;
+      } else {
+        if (twoCount == 0) fullhouseOdds = 0;
+        if (twoCount == 1) fullhouseOdds = (1-(1-((9/47)*(4/46)))*(1-((4/47)*(9/46))))*100;
+        if (twoCount == 2) fullhouseOdds = (1-(43/47)*(44*46)*(1-((3/47)*(2/46))))*100;
+      }
+    }
+    this.setState({fullhouse: Math.round(fullhouseOdds)});
+  }
+
+  straight = (numbers, turnOut) => {
+    let mapping = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, "Jack": 11, "Queen": 12, "King": 13, "Ace": 14}
+    let res = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    let straightOdds = null;
+    for (let el of Object.keys(numbers)) {
+      if (numbers[el] > 0) res[mapping[el]-1] = 1;
+    }
+    if (res[13]==1) res[0] = 1;
+    let idx = []
+    for (let i = 0; i < 10; i++) {
+      let num1s = 0;
+      let zeroidx = null;
+      for (let j = i; j < i + 5; j++ ) {
+        if (res[j] == 1) num1s++;
+        else zeroidx = j;
+      }
+      if (num1s == 4 && (idx.length == 0 || !idx.includes(zeroidx))) {
+        idx.push(zeroidx)
+      }
+    }
+    if (turnOut) {
+      if (idx.length == 0) straightOdds = 0;
+      else if (idx.length == 1) straightOdds = (4/46)*100;
+      else if (idx.length == 2) straightOdds = (8/46) * 100;
+    } else {
+      if (idx.length == 1) straightOdds = (1-(43/47)*(42/46))*100;
+      else if (idx.length == 2) straightOdds = (1-(39/47)*(38/46))*100;
+    }
+    this.setState({straight: Math.round(straightOdds)})
+  }
+
+  flush = (suits, turnOut) => {
+    let flushOdds = null;
+    let maxSuit = 0;
+    let suitVals = Object.values(suits);
+    for (let val of suitVals) {
+      if (val > maxSuit) maxSuit = val;
+    }
+    if (maxSuit >= 5) flushOdds = 100;
+    else if (maxSuit < 3) flushOdds = 0;
+    else if (turnOut) {
+      if (maxSuit == 3) flushOdds = 0;
+      if (maxSuit == 4) flushOdds = (9/46)*100;
+    } else {
+      if (maxSuit == 3) flushOdds = ((10/47)*(9/46))*100;
+      if (maxSuit == 4) flushOdds = (1-(38/47)*(37/46))*100;
+    }
+    this.setState({flush: Math.round(flushOdds)});
+  }
+
+  goBack = () => {
+    this.setState({pair: null, trips: null, quads: null, twopair: null,
+      fullhouse: null, flush: null, straight: null, results: false,})
+  }
+
+  render () {
     return (
       <div>
-        <h1>Chess</h1>
-        <Board boardArr={this.state.boardArr} movePiece={this.movePiece} changePiece={this.changePiece} />
+        <h1>Poker Outs</h1>
+        {!this.state.results && <ChooseCards submit = {this.calculate}/>}
+        {this.state.results && <Results goBack={this.goBack} pair={this.state.pair} trips={this.state.trips} quads={this.state.quads}
+          twopair={this.state.twopair} fullhouse={this.state.fullhouse} flush={this.state.flush} straight={this.state.straight} />}
       </div>
     )
   }

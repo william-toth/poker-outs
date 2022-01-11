@@ -77,7 +77,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }), 
-    new ESLintPlugin({}),
+    // new ESLintPlugin({}),
     new HtmlWebpackPlugin({
     template: './src/index.html',
     filename: './index.html',

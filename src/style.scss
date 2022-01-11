@@ -1,155 +1,81 @@
 body, html {
     font-family: "Futura", sans-serif;
     height: 100%;
-    background: #073b4c;
+    // background: #073b4c;
 }
 
 h1 {
-    font-family: "Futura", sans-serif;
+    // font-family: "Futura", sans-serif;
     text-align: center;
-    color: #ffd166;
-    -webkit-text-stroke: 2px #ef476f;
-    letter-spacing: 40px;
-    font-size: 50px;
-    margin-bottom: 20px;
+    // color: #ffd166;
+    // -webkit-text-stroke: 2px #ef476f;
+    letter-spacing: 9px;
+    font-size: 37.5px;
+    padding-top: 22px;
+    margin-bottom: 0px;
 }
 
-h2, h3, h4 {
-    text-align: center;
-    color: #ffd166;
+h2 {
+    margin-right: -15px;
 }
 
-.options {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 15.35%;
-    margin-right: 14.6%;
-    margin-top: 45px;
-    margin-bottom: 18px;
-    
-}
-
-.red-score {
-    color: #ef476f;
-}
-
-.blue-score {
-    color: #118ab2;
-}
-
-.option {
-    color: black;
-    background-color: #06d6a0;
-    font-size: 15px;
-    font-family: Lucida Grande, Futura;
-    border-width: 0px;
+.card-chunk {
+    justify-content: center;
     border-radius: 5px;
-    margin: 3px;
-    transition: 0.4s;
-    flex: 0 1 calc(18%);
+    align-items: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: -25px;
 }
 
-.score {
-    position: relative;
-    top: 2px;
-    font-size: 1.6rem;
-}
-
-.option:hover {
-    bottom: 2px;
-    box-shadow: 0px 3px 5px#ef476f;
-    transform: translateY(-2px);
-    cursor: pointer;
-}
-
-.grid {
+.player-cards {
     display: flex;
     justify-content: center;
-    flex-flow: row wrap;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin: 20px;
 }
 
-.grid-button {
-    color: black;
-    background-color: #ffd166;
-    font-size: 15px;
-    padding: 20px 0px;
-    width: 100%;
-    font-family: Lucida Grande, Futura;
-    border-width: 0px;
+.indiv-card {
+    margin: 5px;
+}
+
+// .select {
+//     display: flex;
+// }
+
+.dropdown {
+    width: 20vw;
+}
+
+// .dropDown {
+//     border: 1px solid black;
+//     width: 50px;
+//     border-radius: 3px;
+//     margin-bottom: 2px;
+// }
+
+.submit {
+    font-family: Futura;
+    background: white;
+    font-size: 20px;
+    padding: 10px;
+    width: 25vw;
+    border: 2px solid black;
     border-radius: 5px;
-    margin: 3px;
-    transition: 0.4s;
+    transition: 0.3s;
+}
+
+.submit:hover {
+    box-shadow: 2px 2px 5px black;
+    transform: translate(-2px, -2px);
+    cursor: pointer;
 }
 
 .button-div {
-    flex: 0 1 calc(19%);
-    margin-left: 0.5%;
-    margin-right: 0.5%;
-}
-
-.grid-button:hover, .grid-button:active{
-    background-color: #06d6a0;
-    bottom: 2px;
-    box-shadow: 0px 3px 5px#ef476f;
-    transform: translateY(-2px);
-    cursor: pointer;
-}
-
-.grid-button-clicked {
-    font-size: 15px;
-    padding: 20px 0px;
-    width: 100%;
-    font-family: Lucida Grande, Futura;
-    border-width: 0px;
-    border-radius: 5px;
-    margin: 3px;
-    transition: 0.4s;
-}
-
-.tag {
-    color: rgb(60%,60%,60%);
-    text-align: right;
-    margin-right: 14.8%;
-}
-
-.board {
-    width: 44vw;
-    display: flex;
-    justify-content: center;
-    flex-flow: row wrap;
-    margin-left: 26.5vw;
-    margin-bottom: 100px;
-    border: 1.5vw solid rgb(15%,15%,15%);
-}
-
-.white-square {
-    background-color: rgb(80%,80%,80%);
-    width: 5.5vw;
-    height: 5.5vw;
+    margin: 25px;
     display: flex;
     justify-content: center;
 }
 
-.black-square {
-    background-color: rgb(10%,35%,10%);
-    width: 5.5vw;
-    height: 5.5vw;
-    display: flex;
-    justify-content: center;
-}
-
-.selected-square {
-    background-color: rgb(50%,100%,100%);
-    width: 5.5vw;
-    height: 5.5vw;
-    display: flex;
-    justify-content: center;
-}
-
-.piece {
-    margin: 0.35vw;
-    width: 4.8vw;
-    height: 4.8vw;
+.result {
+    text-align: center;
 }
